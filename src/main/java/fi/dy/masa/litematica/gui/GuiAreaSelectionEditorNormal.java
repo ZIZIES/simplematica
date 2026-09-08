@@ -55,11 +55,6 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
         this.selectionId = DataManager.getSelectionManager().getCurrentSelectionId();
         this.useTitleHierarchy = false;
 
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            this.title = StringUtils.translate("litematica.gui.title.area_editor_normal_schematic_projects");
-        }
-        else
         {
             this.title = StringUtils.translate("litematica.gui.title.area_editor_normal");
         }
@@ -152,12 +147,6 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
         ButtonListenerChangeMenu.ButtonType type = ButtonListenerChangeMenu.ButtonType.AREA_SELECTION_BROWSER;
         String label = StringUtils.translate(type.getLabelKey());
         ButtonGeneric button = new ButtonGeneric(x, y, -1, 20, label, type.getIcon());
-
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            button.setEnabled(false);
-            button.setHoverStrings("litematica.gui.button.hover.schematic_projects.area_browser_disabled_currently_in_projects_mode");
-        }
 
         x += this.addButton(button, new ButtonListenerChangeMenu(type, this.getParent())).getWidth() + 4;
 
@@ -295,7 +284,6 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
     protected int createButton(int x, int y, int width, @Nullable Corner corner, ButtonListener.Type type)
     {
         String label;
-        boolean projectsMode = DataManager.getSchematicProjectsManager().hasProjectOpen();
 
         if (type == ButtonListener.Type.CHANGE_SELECTION_MODE)
         {
@@ -306,10 +294,6 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
         {
             String name = Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue().getDisplayName();
             label = type.getDisplayName(name);
-        }
-        else if (type == ButtonListener.Type.CREATE_SCHEMATIC && projectsMode)
-        {
-            label = StringUtils.translate("litematica.gui.button.save_new_schematic_version");
         }
         else
         {
@@ -325,7 +309,7 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
         ButtonListener listener = new ButtonListener(type, corner, null, this);
         this.addButton(button, listener);
 
-        if (type == ButtonListener.Type.CREATE_SCHEMATIC && projectsMode == false)
+        if (type == ButtonListener.Type.CREATE_SCHEMATIC)
         {
             button.setHoverStrings("litematica.gui.button.hover.area_editor.shift_for_in_memory");
         }
@@ -397,15 +381,7 @@ public class GuiAreaSelectionEditorNormal extends GuiListBase<String, WidgetSele
     {
         String newName = this.textFieldSelectionName.getValueWrapper();
 
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            SelectionManager.renameSubRegionBoxIfSingle(this.selection, newName);
-            this.selection.setName(newName);
-        }
-        else
-        {
-            this.renameSelection(newName);
-        }
+        this.renameSelection(newName);
     }
 
     protected void renameSelection(String newName)

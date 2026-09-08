@@ -185,15 +185,6 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
             return true;
         }
 
-        if (Hotkeys.SCHEMATIC_VERSION_CYCLE_MODIFIER.getKeybind().isKeybindHeld())
-        {
-            if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-            {
-                DataManager.getSchematicProjectsManager().cycleVersion(amount * -1);
-            }
-            return true;
-        }
-
         return false;
     }
 

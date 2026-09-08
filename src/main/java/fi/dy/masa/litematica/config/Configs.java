@@ -139,7 +139,6 @@ public class Configs implements IConfigHandler
         public static final ConfigString        TOOL_ITEM_COMPONENTS        = new ConfigString( "toolItemComponents", "empty").apply(GENERIC_KEY);
         public static final ConfigOptionList    TRANSLATION_LANGUAGE        = new ConfigOptionList("translationLanguage", new i18nConfig(LANG.orElseThrow())).apply(GENERIC_KEY);
         public static final ConfigOptionList    TRANSLATION_MODE            = new ConfigOptionList("translationMode",     i18nMode.FOLLOW_VANILLA).apply(GENERIC_KEY);
-        public static final ConfigBoolean       UNHIDE_SCHEMATIC_PROJECTS   = new ConfigBoolean("unhideSchematicVCS", false).apply(GENERIC_KEY);
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 PLACEMENT_MANAGER_THREAD_COUNT,
@@ -219,7 +218,6 @@ public class Configs implements IConfigHandler
                 SERVER_NBT_REQUEST_RATE,
                 SIGN_TEXT_PASTE,
                 TOOL_ITEM_ENABLED,
-                UNHIDE_SCHEMATIC_PROJECTS,
 
                 PASTE_REPLACE_BEHAVIOR,
                 PASTE_LAYER_BEHAVIOR,

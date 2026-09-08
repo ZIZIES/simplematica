@@ -39,7 +39,6 @@ import fi.dy.masa.litematica.gui.widgets.WidgetSchematicVerificationResult.Block
 import fi.dy.masa.litematica.schematic.placement.SchematicPlacement;
 import fi.dy.masa.litematica.schematic.placement.SchematicPlacementManager;
 import fi.dy.masa.litematica.schematic.placement.SubRegionPlacement.RequiredEnabled;
-import fi.dy.masa.litematica.schematic.projects.SchematicProject;
 import fi.dy.masa.litematica.schematic.verifier.SchematicVerifier;
 import fi.dy.masa.litematica.schematic.verifier.SchematicVerifier.BlockMismatch;
 import fi.dy.masa.litematica.schematic.verifier.SchematicVerifier.MismatchRenderPos;
@@ -132,12 +131,11 @@ public class OverlayRenderer
         AreaSelection currentSelection = sm.getCurrentSelection();
         boolean renderAreas = currentSelection != null && Configs.Visuals.ENABLE_AREA_SELECTION_RENDERING.getBooleanValue();
         boolean renderPlacements = this.placements.isEmpty() == false && Configs.Visuals.ENABLE_PLACEMENT_BOXES_RENDERING.getBooleanValue();
-        boolean isProjectMode = DataManager.getSchematicProjectsManager().hasProjectOpen();
         float expand = 0.001f;
         float lineWidthBlockBox = 2f;
-        float lineWidthArea = isProjectMode ? 3f : 1.5f;
+        float lineWidthArea = 1.5f;
 
-        if (renderAreas || renderPlacements || isProjectMode)
+        if (renderAreas || renderPlacements)
         {
             profiler.popPush("render_areas");
             if (renderAreas)
@@ -217,17 +215,6 @@ public class OverlayRenderer
                 }
 
                 profiler.pop();
-            }
-
-            profiler.popPush("render_projects");
-            if (isProjectMode)
-            {
-                SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-
-                if (project != null)
-                {
-                    fi.dy.masa.malilib.render.RenderUtils.renderBlockOutline(project.getOrigin(), expand, 4f, this.colorOverlapping, false);
-                }
             }
         }
 

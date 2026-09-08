@@ -75,7 +75,7 @@ public enum ToolMode implements StringRepresentable
 
     public boolean getUsesAreaSelection()
     {
-        return this.getUsesSchematic() == false || DataManager.getSchematicProjectsManager().hasProjectOpen();
+        return this.getUsesSchematic() == false;
     }
 
     public boolean getUsesBlockPrimary()

@@ -31,7 +31,6 @@ import fi.dy.masa.litematica.data.DataManager;
 import fi.dy.masa.litematica.gui.GuiAreaSelectionEditorNormal;
 import fi.dy.masa.litematica.gui.GuiAreaSelectionEditorSimple;
 import fi.dy.masa.litematica.schematic.placement.SchematicPlacement;
-import fi.dy.masa.litematica.schematic.projects.SchematicProject;
 import fi.dy.masa.litematica.util.PositionUtils;
 import fi.dy.masa.litematica.util.PositionUtils.Corner;
 import fi.dy.masa.litematica.util.RayTraceUtils;
@@ -61,12 +60,6 @@ public class SelectionManager
 
     public SelectionMode getSelectionMode()
     {
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-            return project != null ? project.getSelectionMode() : SelectionMode.SIMPLE;
-        }
-
         return this.mode;
     }
 
@@ -81,23 +74,7 @@ public class SelectionManager
 
     public void switchSelectionMode()
     {
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-
-            if (project != null)
-            {
-                project.switchSelectionMode();
-            }
-            else
-            {
-                InfoUtils.showGuiOrInGameMessage(MessageType.WARNING, "litematica.error.schematic_projects.in_projects_mode_but_no_project_open");
-            }
-        }
-        else
-        {
-            this.mode = (SelectionMode) this.mode.cycle(true);
-        }
+        this.mode = (SelectionMode) this.mode.cycle(true);
     }
 
     @Nullable
@@ -114,27 +91,12 @@ public class SelectionManager
 
     public boolean hasNormalSelection()
     {
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            return true;
-        }
-
         return this.getNormalSelection(this.currentSelectionId) != null;
     }
 
     @Nullable
     public AreaSelection getCurrentSelection()
     {
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-
-            if (project != null)
-            {
-                return project.getSelection();
-            }
-        }
-
         return this.getSelection(this.currentSelectionId);
     }
 

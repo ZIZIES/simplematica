@@ -162,7 +162,9 @@ tasks.register('copyJarToMods', Copy) {
 	}
 
 	from tasks.named('jar')
-	into modsDir
+	// Gradle resolves the destination even when onlyIf skips the task, so an
+	// empty mods_dir needs somewhere harmless to point at.
+	into modsDir.isEmpty() ? layout.buildDirectory.dir('tmp/copyJarToMods') : file(modsDir)
 
 	doFirst {
 		// Fabric Loader refuses to launch when two jars declare the same mod id,

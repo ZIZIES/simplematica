@@ -21,14 +21,7 @@ public class GuiAreaSelectionEditorSimple extends GuiAreaSelectionEditorNormal
     {
         super(selection);
 
-        if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            this.title = StringUtils.translate("litematica.gui.title.area_editor_normal_schematic_projects");
-        }
-        else
-        {
-            this.title = StringUtils.translate("litematica.gui.title.area_editor_simple");
-        }
+        this.title = StringUtils.translate("litematica.gui.title.area_editor_simple");
     }
 
     @Override

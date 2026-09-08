@@ -93,7 +93,6 @@ public class KeyCallbacks
         Hotkeys.OPEN_GUI_MATERIAL_LIST.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_PLACEMENT_SETTINGS.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SCHEMATIC_PLACEMENTS.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.OPEN_GUI_SCHEMATIC_PROJECTS.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SCHEMATIC_VERIFIER.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SELECTION_MANAGER.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
@@ -103,9 +102,6 @@ public class KeyCallbacks
         Hotkeys.RERENDER_SCHEMATIC.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.SAVE_AREA_AS_IN_MEMORY_SCHEMATIC.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.SAVE_AREA_AS_SCHEMATIC_TO_FILE.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.SCHEMATIC_VCS_DELETE_BY_PLACEMENT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.SCHEMATIC_VERSION_CYCLE_NEXT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.SCHEMATIC_VERSION_CYCLE_PREVIOUS.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.SELECTION_GROW_HOTKEY.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.SELECTION_SHRINK_HOTKEY.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.TOOL_PLACE_CORNER_1.getKeybind().setCallback(callbackHotkeys);
@@ -236,11 +232,10 @@ public class KeyCallbacks
             if (toolEnabled && hasTool)
             {
                 int maxDistance = 200;
-                boolean projectMode = DataManager.getSchematicProjectsManager().hasProjectOpen();
 
                 if (isToolPrimary || isToolSecondary)
                 {
-                    if (mode.getUsesAreaSelection() || projectMode)
+                    if (mode.getUsesAreaSelection())
                     {
                         SelectionManager sm = DataManager.getSelectionManager();
                         boolean grabModifier = Hotkeys.SELECTION_GRAB_MODIFIER.getKeybind().isKeybindHeld();
@@ -275,7 +270,7 @@ public class KeyCallbacks
                 }
                 else if (isToolSelect)
                 {
-                    if (mode.getUsesAreaSelection() || projectMode)
+                    if (mode.getUsesAreaSelection())
                     {
                         SelectionManager sm = DataManager.getSelectionManager();
 
@@ -329,25 +324,12 @@ public class KeyCallbacks
             }
             else if (key == Hotkeys.OPEN_GUI_SELECTION_MANAGER.getKeybind())
             {
-                if (DataManager.getSchematicProjectsManager().hasProjectOpen() == false)
-                {
-                    GuiBase.openGui(new GuiAreaSelectionManager());
-                }
-                else
-                {
-                    InfoUtils.showGuiOrInGameMessage(MessageType.WARNING, "litematica.gui.button.hover.schematic_projects.area_browser_disabled_currently_in_projects_mode");
-                }
-
+                GuiBase.openGui(new GuiAreaSelectionManager());
                 return true;
             }
             else if (key == Hotkeys.OPEN_GUI_SCHEMATIC_PLACEMENTS.getKeybind())
             {
                 GuiBase.openGui(new GuiSchematicPlacementsList());
-                return true;
-            }
-            else if (key == Hotkeys.OPEN_GUI_SCHEMATIC_PROJECTS.getKeybind())
-            {
-                DataManager.getSchematicProjectsManager().openSchematicProjectsGui();
                 return true;
             }
             else if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
@@ -506,22 +488,6 @@ public class KeyCallbacks
             {
                 return SchematicUtils.saveSchematic(true);
             }
-            else if (key == Hotkeys.SCHEMATIC_VERSION_CYCLE_NEXT.getKeybind())
-            {
-                if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-                {
-                    DataManager.getSchematicProjectsManager().cycleVersion(1);
-                }
-                return true;
-            }
-            else if (key == Hotkeys.SCHEMATIC_VERSION_CYCLE_PREVIOUS.getKeybind())
-            {
-                if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-                {
-                    DataManager.getSchematicProjectsManager().cycleVersion(-1);
-                }
-                return true;
-            }
             else if (key == Hotkeys.CLONE_SELECTION.getKeybind())
             {
                 SchematicUtils.cloneSelectionArea(this.mc);
@@ -529,12 +495,7 @@ public class KeyCallbacks
             }
             else if (key == Hotkeys.EXECUTE_OPERATION.getKeybind() && ((hasTool && toolEnabled) || Configs.Generic.EXECUTE_REQUIRE_TOOL.getBooleanValue() == false))
             {
-                if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-                {
-                    DataManager.getSchematicProjectsManager().pasteCurrentVersionToWorld();
-                    return true;
-                }
-                else if (mode == ToolMode.PASTE_SCHEMATIC)
+                if (mode == ToolMode.PASTE_SCHEMATIC)
                 {
                     DataManager.getSchematicPlacementManager().pasteCurrentPlacementToWorld(this.mc);
                     return true;
@@ -553,14 +514,6 @@ public class KeyCallbacks
                 {
                     boolean removeEntities = true; // TODO
                     ToolUtils.deleteSelectionVolumes(removeEntities, this.mc);
-                    return true;
-                }
-            }
-            else if (key == Hotkeys.SCHEMATIC_VCS_DELETE_BY_PLACEMENT.getKeybind())
-            {
-                if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-                {
-                    DataManager.getSchematicProjectsManager().deleteBlocksByPlacement();
                     return true;
                 }
             }

@@ -64,28 +64,11 @@ public class GuiMainMenu extends GuiBase
         y += 22;
 
         this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.TASK_MANAGER);
-
-        if (Configs.Generic.UNHIDE_SCHEMATIC_PROJECTS.getBooleanValue())
-        {
-            y += 22;
-            this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.SCHEMATIC_PROJECTS_MANAGER);
-        }
     }
 
     private void createChangeMenuButton(int x, int y, int width, ButtonListenerChangeMenu.ButtonType type)
     {
         ButtonGeneric button = new ButtonGeneric(x, y, width, 20, type.getDisplayName(), type.getIcon());
-
-        if (type == ButtonListenerChangeMenu.ButtonType.AREA_SELECTION_BROWSER &&
-            DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            button.setEnabled(false);
-            button.setHoverStrings("litematica.gui.button.hover.schematic_projects.area_browser_disabled_currently_in_projects_mode");
-        }
-        else if (type == ButtonListenerChangeMenu.ButtonType.SCHEMATIC_PROJECTS_MANAGER)
-        {
-            button.setHoverStrings("litematica.gui.button.hover.schematic_projects.menu_warning");
-        }
 
         this.addButton(button, new ButtonListenerChangeMenu(type, this));
     }
@@ -154,9 +137,6 @@ public class GuiMainMenu extends GuiBase
                 case TASK_MANAGER:
                     gui = new GuiTaskManager();
                     break;
-                case SCHEMATIC_PROJECTS_MANAGER:
-                    DataManager.getSchematicProjectsManager().openSchematicProjectsGui();
-                    return;
             }
 
             if (gui != null)
@@ -182,8 +162,6 @@ public class GuiMainMenu extends GuiBase
             SCHEMATIC_MANAGER           ("litematica.gui.button.change_menu.schematic_manager", ButtonIcons.SCHEMATIC_MANAGER),
             // Open the Task Manager
             TASK_MANAGER                ("litematica.gui.button.change_menu.task_manager", ButtonIcons.TASK_MANAGER),
-            // Open the Schematic Projects browser
-            SCHEMATIC_PROJECTS_MANAGER  ("litematica.gui.button.change_menu.schematic_projects_manager", ButtonIcons.SCHEMATIC_PROJECTS),
             // In-game Configuration GUI
             CONFIGURATION               ("litematica.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
             // Switch to the Litematica main menu

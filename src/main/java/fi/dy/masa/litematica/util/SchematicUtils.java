@@ -60,8 +60,6 @@ import fi.dy.masa.litematica.schematic.placement.SchematicPlacementManager;
 import fi.dy.masa.litematica.schematic.placement.SchematicPlacementManager.PlacementPart;
 import fi.dy.masa.litematica.schematic.placement.SubRegionPlacement;
 import fi.dy.masa.litematica.schematic.placement.SubRegionPlacement.RequiredEnabled;
-import fi.dy.masa.litematica.schematic.projects.SchematicProject;
-import fi.dy.masa.litematica.schematic.projects.SchematicVersion;
 import fi.dy.masa.litematica.selection.AreaSelection;
 import fi.dy.masa.litematica.selection.Box;
 import fi.dy.masa.litematica.selection.SelectionManager;
@@ -81,18 +79,7 @@ public class SchematicUtils
 
         if (area != null)
         {
-            if (DataManager.getSchematicProjectsManager().hasProjectOpen())
-            {
-                String title = "litematica.gui.title.schematic_projects.save_new_version";
-                SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-                GuiTextInputStackedMultiLine gui = new GuiTextInputStackedMultiLine(SchematicVersion.MAX_DESCRIPTION_LENGTH, 2, 8,
-                                                                                    title,
-                                                                                    project.getCurrentVersionName(), project.getCurrentVersionDescription(),
-                                                                                    GuiUtils.getCurrentScreen(),
-                                                                                    new SchematicVersionCreator());
-                GuiBase.openGui(gui);
-            }
-            else if (inMemoryOnly)
+            if (inMemoryOnly)
             {
                 String title = "litematica.gui.title.create_in_memory_schematic";
                 GuiTextInput gui = new GuiTextInput(512, title, area.getName(), GuiUtils.getCurrentScreen(), new InMemorySchematicCreator(area));
@@ -1171,15 +1158,6 @@ public class SchematicUtils
             this.hitVec = hitVec;
             this.stateOriginal = stateOriginal;
             this.stateNew = stateNew;
-        }
-    }
-
-    public static class SchematicVersionCreator implements IStringDualConsumerFeedback
-    {
-        @Override
-        public boolean setStrings(String string1, String string2)
-        {
-            return DataManager.getSchematicProjectsManager().commitNewVersion(string1, string2);
         }
     }
 

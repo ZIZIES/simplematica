@@ -14,8 +14,6 @@ import fi.dy.masa.litematica.config.Configs;
 import fi.dy.masa.litematica.data.DataManager;
 import fi.dy.masa.litematica.schematic.placement.SchematicPlacement;
 import fi.dy.masa.litematica.schematic.placement.SubRegionPlacement;
-import fi.dy.masa.litematica.schematic.projects.SchematicProject;
-import fi.dy.masa.litematica.schematic.projects.SchematicVersion;
 import fi.dy.masa.litematica.selection.AreaSelection;
 import fi.dy.masa.litematica.selection.Box;
 import fi.dy.masa.litematica.selection.SelectionManager;
@@ -93,52 +91,6 @@ public class ToolHud extends InfoHud
 
         List<String> lines = this.lineList;
 
-        if (hasTool && DataManager.getSchematicProjectsManager().hasProjectOpen())
-        {
-            SchematicProject project = DataManager.getSchematicProjectsManager().getCurrentProject();
-
-            lines.add(StringUtils.translate("litematica.hud.schematic_projects.project_name", green + project.getName() + rst));
-            SchematicVersion version = project.getCurrentVersion();
-
-            if (version != null)
-            {
-                lines.add(StringUtils.translate("litematica.hud.schematic_projects.current_version", green + version.getVersion() + rst, green + project.getVersionCount() + rst, green + version.getName() + rst));
-                DATE.setTime(version.getTimeStamp());
-                lines.add(StringUtils.translate("litematica.hud.schematic_projects.current_version_date", green + SIMPLE_DATE_FORMAT.format(DATE) + rst));
-                BlockPos o = project.getOrigin();
-                str = String.format("%d, %d, %d", o.getX(), o.getY(), o.getZ());
-                lines.add(StringUtils.translate("litematica.hud.schematic_projects.origin", green + str + rst));
-            }
-            else
-            {
-                lines.add(StringUtils.translate("litematica.hud.schematic_projects.no_versions"));
-            }
-
-            SelectionManager sm = DataManager.getSelectionManager();
-            AreaSelection selection = sm.getCurrentSelection();
-
-            if (selection != null && sm.getSelectionMode() == SelectionMode.NORMAL)
-            {
-                String subRegionName = selection.getCurrentSubRegionBoxName();
-
-                if (subRegionName != null)
-                {
-                    lines.add(StringUtils.translate("litematica.hud.area_selection.selected_sub_region", green + subRegionName + rst));
-                }
-            }
-
-            str = green + Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue().getDisplayName() + rst;
-            lines.add(StringUtils.translate("litematica.hud.area_selection.selection_corners_mode", str));
-
-            // The Projects Mode indicator gets rendered via the status info HUD, if it's enabled.
-            // If it's not enabled, then it gets rendered here if the player is currently holding the tool
-            if (StatusInfoRenderer.getInstance().shouldRenderStatusInfoHud() == false)
-            {
-                lines.add(StringUtils.translate("litematica.hud.schematic_projects_mode"));
-            }
-
-            return;
-        }
 
         ToolMode mode = DataManager.getToolMode();
         String orange = GuiBase.TXT_GOLD;

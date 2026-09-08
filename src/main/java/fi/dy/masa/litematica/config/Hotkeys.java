@@ -33,7 +33,6 @@ public class Hotkeys
     public static final ConfigHotkey OPEN_GUI_MATERIAL_LIST             = new ConfigHotkey("openGuiMaterialList",               "M,L").apply(HOTKEYS_KEY);
     public static final ConfigHotkey OPEN_GUI_PLACEMENT_SETTINGS        = new ConfigHotkey("openGuiPlacementSettings",          "KP_SUBTRACT").apply(HOTKEYS_KEY);
     public static final ConfigHotkey OPEN_GUI_SCHEMATIC_PLACEMENTS      = new ConfigHotkey("openGuiSchematicPlacements",        "M,P").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey OPEN_GUI_SCHEMATIC_PROJECTS        = new ConfigHotkey("openGuiSchematicProjects",          "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey OPEN_GUI_SCHEMATIC_VERIFIER        = new ConfigHotkey("openGuiSchematicVerifier",          "M,V").apply(HOTKEYS_KEY);
     public static final ConfigHotkey OPEN_GUI_SELECTION_MANAGER         = new ConfigHotkey("openGuiSelectionManager",           "M,S").apply(HOTKEYS_KEY);
     public static final ConfigHotkey OPEN_GUI_SETTINGS                  = new ConfigHotkey("openGuiSettings",                   "M,C").apply(HOTKEYS_KEY);
@@ -55,10 +54,6 @@ public class Hotkeys
 	public static final ConfigHotkey SCHEMATIC_EDIT_REPLACE_SELECTION   = new ConfigHotkey("schematicEditReplaceSelection",     "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SCHEMATIC_PLACEMENT_ROTATION       = new ConfigHotkey("schematicPlacementRotation",        "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SCHEMATIC_PLACEMENT_MIRROR         = new ConfigHotkey("schematicPlacementMirror",          "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_VCS_DELETE_BY_PLACEMENT  = new ConfigHotkey("schematicVCSDeleteBlockByPlacement","").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_VERSION_CYCLE_MODIFIER   = new ConfigHotkey("schematicVersionCycleModifier",     "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_VERSION_CYCLE_NEXT       = new ConfigHotkey("schematicVersionCycleNext",         "").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_VERSION_CYCLE_PREVIOUS   = new ConfigHotkey("schematicVersionCyclePrevious",     "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey SELECTION_GRAB_MODIFIER            = new ConfigHotkey("selectionGrabModifier",             "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SELECTION_GROW_HOTKEY              = new ConfigHotkey("selectionGrow",                     "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey SELECTION_GROW_MODIFIER            = new ConfigHotkey("selectionGrowModifier",             "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
@@ -113,7 +108,6 @@ public class Hotkeys
             OPEN_GUI_MATERIAL_LIST,
             OPEN_GUI_PLACEMENT_SETTINGS,
             OPEN_GUI_SCHEMATIC_PLACEMENTS,
-            OPEN_GUI_SCHEMATIC_PROJECTS,
             OPEN_GUI_SCHEMATIC_VERIFIER,
             OPEN_GUI_SELECTION_MANAGER,
             OPEN_GUI_SETTINGS,
@@ -135,10 +129,6 @@ public class Hotkeys
 			SCHEMATIC_EDIT_REPLACE_SELECTION,			// Requested to be added by Earthcomputer; from Litemoretica
 			SCHEMATIC_PLACEMENT_ROTATION,
             SCHEMATIC_PLACEMENT_MIRROR,
-            SCHEMATIC_VCS_DELETE_BY_PLACEMENT,
-            SCHEMATIC_VERSION_CYCLE_MODIFIER,
-            SCHEMATIC_VERSION_CYCLE_NEXT,
-            SCHEMATIC_VERSION_CYCLE_PREVIOUS,
             SELECTION_GRAB_MODIFIER,
             SELECTION_GROW_HOTKEY,
             SELECTION_GROW_MODIFIER,
