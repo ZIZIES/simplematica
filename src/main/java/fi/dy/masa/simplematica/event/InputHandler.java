@@ -1,0 +1,271 @@
+package fi.dy.masa.simplematica.event;
+
+import fi.dy.masa.malilib.gui.Message.MessageType;
+import fi.dy.masa.malilib.hotkeys.*;
+import fi.dy.masa.malilib.util.GuiUtils;
+import fi.dy.masa.malilib.util.InfoUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import fi.dy.masa.simplematica.Reference;
+import fi.dy.masa.simplematica.config.Configs;
+import fi.dy.masa.simplematica.config.Hotkeys;
+import fi.dy.masa.simplematica.data.DataManager;
+import fi.dy.masa.simplematica.gui.GuiSchematicManager;
+import fi.dy.masa.simplematica.selection.AreaSelection;
+import fi.dy.masa.simplematica.selection.Box;
+import fi.dy.masa.simplematica.selection.SelectionManager;
+import fi.dy.masa.simplematica.tool.ToolMode;
+import fi.dy.masa.simplematica.util.*;
+import fi.dy.masa.simplematica.util.PositionUtils.Corner;
+
+public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IMouseInputHandler
+{
+    private static final InputHandler INSTANCE = new InputHandler();
+
+    private InputHandler()
+    {
+    }
+
+    public static InputHandler getInstance()
+    {
+        return INSTANCE;
+    }
+
+    @Override
+    public void addKeysToMap(IKeybindManager manager)
+    {
+        for (IHotkey hotkey : Hotkeys.HOTKEY_LIST)
+        {
+            manager.addKeybindToMap(hotkey.getKeybind());
+        }
+
+        for (IHotkey hotkey : Configs.Generic.HOTKEY_LIST)
+        {
+            manager.addKeybindToMap(hotkey.getKeybind());
+        }
+
+        for (IHotkey hotkey : Configs.Visuals.HOTKEY_LIST)
+        {
+            manager.addKeybindToMap(hotkey.getKeybind());
+        }
+    }
+
+    @Override
+    public void addHotkeys(IKeybindManager manager)
+    {
+        manager.addHotkeysForCategory(Reference.MOD_NAME, Reference.MOD_ID+ ".hotkeys.category.generic_hotkeys", Hotkeys.HOTKEY_LIST);
+        manager.addHotkeysForCategory(Reference.MOD_NAME, Reference.MOD_ID+ ".hotkeys.category.config_generic_hotkeys", Configs.Generic.HOTKEY_LIST);
+        manager.addHotkeysForCategory(Reference.MOD_NAME, Reference.MOD_ID+ ".hotkeys.category.config_visuals_hotkeys", Configs.Visuals.HOTKEY_LIST);
+    }
+
+    @Override
+    public boolean onKeyInput(KeyEvent input, boolean eventKeyState)
+    {
+        if (eventKeyState)
+        {
+            Minecraft mc = Minecraft.getInstance();
+
+            if (mc.options.keyUse.matches(input))
+            {
+                return this.handleUseKey(mc);
+            }
+            else if (mc.options.keyAttack.matches(input))
+            {
+                return this.handleAttackKey(mc);
+            }
+            else if (mc.options.keyScreenshot.matches(input) && GuiSchematicManager.hasPendingPreviewTask())
+            {
+                return GuiSchematicManager.setPreviewImage();
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onMouseClick(MouseButtonEvent click, boolean eventButtonState)
+    {
+        Minecraft mc = Minecraft.getInstance();
+
+        // Tool enabled, and not in a GUI
+        if (GuiUtils.getCurrentScreen() == null && mc.level != null && mc.player != null && eventButtonState)
+        {
+            if (mc.options.keyUse.matchesMouse(click))
+            {
+                return this.handleUseKey(mc);
+            }
+            else if (mc.options.keyAttack.matchesMouse(click))
+            {
+                return this.handleAttackKey(mc);
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onMouseScroll(double mouseX, double mouseY, double dWheel)
+    {
+        //Simplematica.debugLog("Mouse scroll: x: {}, y; {}, wheel: {}", mouseX, mouseY, dWheel);
+        Minecraft mc = Minecraft.getInstance();
+
+        // Not in a GUI
+        if (GuiUtils.getCurrentScreen() == null && mc.level != null && mc.player != null)
+        {
+            return this.handleMouseScroll(dWheel, mc);
+        }
+
+        return false;
+    }
+
+    private boolean handleMouseScroll(double dWheel, Minecraft mc)
+    {
+        boolean toolEnabled = Configs.Visuals.ENABLE_RENDERING.getBooleanValue() && Configs.Generic.TOOL_ITEM_ENABLED.getBooleanValue();
+
+        if (toolEnabled == false || EntityUtils.hasToolItem(mc.player) == false)
+        {
+            return false;
+        }
+
+        final int amount = dWheel > 0 ? 1 : -1;
+        ToolMode mode = DataManager.getToolMode();
+        Entity entity = fi.dy.masa.malilib.util.EntityUtils.getCameraEntity();
+
+        if (Hotkeys.SELECTION_GRAB_MODIFIER.getKeybind().isKeybindHeld() && entity != null)
+        {
+            if (mode.getUsesAreaSelection())
+            {
+                SelectionManager sm = DataManager.getSelectionManager();
+
+                if (sm.hasGrabbedElement())
+                {
+                    sm.changeGrabDistance(entity, amount);
+                    return true;
+                }
+                else if (sm.hasSelectedOrigin())
+                {
+                    AreaSelection area = sm.getCurrentSelection();
+                    BlockPos old = area.getEffectiveOrigin();
+                    area.moveEntireSelectionTo(old.relative(EntityUtils.getClosestLookingDirection(entity), amount), false);
+                    return true;
+                }
+            }
+        }
+
+        if (Hotkeys.SELECTION_GROW_MODIFIER.getKeybind().isKeybindHeld())
+        {
+            return this.growOrShrinkSelection(amount, mode);
+        }
+
+        if (Hotkeys.SELECTION_NUDGE_MODIFIER.getKeybind().isKeybindHeld())
+        {
+            return nudgeSelection(amount, mode, entity);
+        }
+
+        if (Hotkeys.OPERATION_MODE_CHANGE_MODIFIER.getKeybind().isKeybindHeld())
+        {
+            boolean forward = amount < 0;
+            boolean reverseOperationModeDirection = Configs.Generic.REVERSE_OP_MODE_DIRECTION.getBooleanValue();
+
+            if (reverseOperationModeDirection)
+            {
+                forward = !forward;
+            }
+
+            DataManager.setToolMode(DataManager.getToolMode().cycle(forward));
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean nudgeSelection(int amount, ToolMode mode, Entity entity)
+    {
+        if (mode.getUsesAreaSelection())
+        {
+            SelectionManager sm = DataManager.getSelectionManager();
+
+            if (sm.hasSelectedElement())
+            {
+                sm.moveSelectedElement(EntityUtils.getClosestLookingDirection(entity), amount);
+                return true;
+            }
+        }
+        else if (mode.getUsesSchematic())
+        {
+            Direction direction = EntityUtils.getClosestLookingDirection(entity);
+            DataManager.getSchematicPlacementManager().nudgePositionOfCurrentSelection(direction, amount);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean growOrShrinkSelection(int amount, ToolMode mode)
+    {
+        if (mode.getUsesAreaSelection())
+        {
+            SelectionManager sm = DataManager.getSelectionManager();
+            AreaSelection area = sm.getCurrentSelection();
+
+            if (area != null)
+            {
+                Box box = area.getSelectedSubRegionBox();
+
+                if (box != null)
+                {
+                    Box newBox = PositionUtils.growOrShrinkBox(box, amount);
+                    area.setSelectedSubRegionCornerPos(newBox.getPos1(), Corner.CORNER_1);
+                    area.setSelectedSubRegionCornerPos(newBox.getPos2(), Corner.CORNER_2);
+                }
+                else
+                {
+                    InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "simplematica.error.area_selection.grow.no_sub_region_selected");
+                }
+            }
+            else
+            {
+                InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "simplematica.message.error.no_area_selected");
+            }
+        }
+
+        return true;
+    }
+
+    private boolean handleAttackKey(Minecraft mc)
+    {
+        return false;
+    }
+
+    private boolean handleUseKey(Minecraft mc)
+    {
+        if (mc.player != null)
+        {
+            if (Configs.Generic.PICK_BLOCK_ENABLED.getBooleanValue())
+            {
+                if (KeybindMulti.hotkeyMatchesKeybind(Hotkeys.PICK_BLOCK_LAST, mc.options.keyUse))
+                {
+                    WorldUtils.doSchematicWorldPickBlock(false, mc);
+                }
+            }
+
+            if (Configs.Generic.PLACEMENT_RESTRICTION.getBooleanValue())
+            {
+                if (Configs.Generic.EASY_PLACE_POST_REWRITE.getBooleanValue())
+                {
+                    return EasyPlaceUtils.handlePlacementRestriction();
+                }
+                else
+                {
+                    return EasyPlaceUtils.handlePlacementRestriction(mc);
+                }
+            }
+        }
+
+        return false;
+    }
+}
