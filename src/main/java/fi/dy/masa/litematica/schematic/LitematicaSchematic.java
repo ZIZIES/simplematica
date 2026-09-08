@@ -72,7 +72,6 @@ import fi.dy.masa.litematica.data.EntityDataManager;
 import fi.dy.masa.litematica.mixin.world.IMixinLevelTicks;
 import fi.dy.masa.litematica.network.ServuxLitematicaHandler;
 import fi.dy.masa.litematica.network.ServuxLitematicaPacket;
-import fi.dy.masa.litematica.scheduler.tasks.TaskPasteSchematicPerChunkDirect;
 import fi.dy.masa.litematica.scheduler.tasks.TaskProcessChunkBase;
 import fi.dy.masa.litematica.scheduler.tasks.TaskSaveSchematic;
 import fi.dy.masa.litematica.schematic.container.ILitematicaBlockStatePalette;

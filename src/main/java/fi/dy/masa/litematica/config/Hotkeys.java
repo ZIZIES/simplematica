@@ -11,12 +11,10 @@ public class Hotkeys
     private static final String HOTKEYS_KEY = Reference.MOD_ID+".config.hotkeys";
 
     public static final ConfigHotkey ADD_SELECTION_BOX                  = new ConfigHotkey("addSelectionBox",                   "M,A").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey CLONE_SELECTION                    = new ConfigHotkey("cloneSelection",                    "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey DELETE_SELECTION_BOX               = new ConfigHotkey("deleteSelectionBox",                "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey EASY_PLACE_ACTIVATION              = new ConfigHotkey("easyPlaceUseKey",                   "BUTTON_2", KeybindSettings.PRESS_ALLOWEXTRA).apply(HOTKEYS_KEY);
     public static final ConfigHotkey EASY_PLACE_FIRST                   = new ConfigHotkey("easyPlaceFirst",                    "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey EASY_PLACE_TOGGLE                  = new ConfigHotkey("easyPlaceToggle",                   "").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey EXECUTE_OPERATION                  = new ConfigHotkey("executeOperation",                  "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey INVERT_GHOST_BLOCK_RENDER_STATE    = new ConfigHotkey("invertGhostBlockRenderState",       "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey INVERT_OVERLAY_RENDER_STATE        = new ConfigHotkey("invertOverlayRenderState",          "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey LAYER_MODE_NEXT                    = new ConfigHotkey("layerModeNext",                     "M,PAGE_UP").apply(HOTKEYS_KEY);
@@ -45,13 +43,6 @@ public class Hotkeys
     public static final ConfigHotkey RERENDER_SCHEMATIC                 = new ConfigHotkey("rerenderSchematic",                 "F3,M").apply(HOTKEYS_KEY);
     public static final ConfigHotkey SAVE_AREA_AS_IN_MEMORY_SCHEMATIC   = new ConfigHotkey("saveAreaAsInMemorySchematic",       "").apply(HOTKEYS_KEY);
     public static final ConfigHotkey SAVE_AREA_AS_SCHEMATIC_TO_FILE     = new ConfigHotkey("saveAreaAsSchematicToFile",         "LEFT_CONTROL,LEFT_ALT,S").apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_BREAK_ALL_EXCEPT    = new ConfigHotkey("schematicEditBreakAllExcept",       "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_BREAK_ALL           = new ConfigHotkey("schematicEditBreakPlaceAll",        "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_BREAK_DIRECTION     = new ConfigHotkey("schematicEditBreakPlaceDirection",  "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_REPLACE_ALL         = new ConfigHotkey("schematicEditReplaceAll",           "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_REPLACE_BLOCK       = new ConfigHotkey("schematicEditReplaceBlock",         "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey SCHEMATIC_EDIT_REPLACE_DIRECTION   = new ConfigHotkey("schematicEditReplaceDirection",     "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-	public static final ConfigHotkey SCHEMATIC_EDIT_REPLACE_SELECTION   = new ConfigHotkey("schematicEditReplaceSelection",     "", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SCHEMATIC_PLACEMENT_ROTATION       = new ConfigHotkey("schematicPlacementRotation",        "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SCHEMATIC_PLACEMENT_MIRROR         = new ConfigHotkey("schematicPlacementMirror",          "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey SELECTION_GRAB_MODIFIER            = new ConfigHotkey("selectionGrabModifier",             "",     KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
@@ -80,18 +71,14 @@ public class Hotkeys
     public static final ConfigHotkey TOOL_PLACE_CORNER_1                = new ConfigHotkey("toolPlaceCorner1",                  "BUTTON_1", KeybindSettings.PRESS_ALLOWEXTRA).apply(HOTKEYS_KEY);
     public static final ConfigHotkey TOOL_PLACE_CORNER_2                = new ConfigHotkey("toolPlaceCorner2",                  "BUTTON_2", KeybindSettings.PRESS_ALLOWEXTRA).apply(HOTKEYS_KEY);
     public static final ConfigHotkey TOOL_SELECT_ELEMENTS               = new ConfigHotkey("toolSelectElements",                "BUTTON_3", KeybindSettings.PRESS_ALLOWEXTRA).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey TOOL_SELECT_MODIFIER_BLOCK_1       = new ConfigHotkey("toolSelectModifierBlock1",          "LEFT_ALT", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
-    public static final ConfigHotkey TOOL_SELECT_MODIFIER_BLOCK_2       = new ConfigHotkey("toolSelectModifierBlock2",          "LEFT_SHIFT", KeybindSettings.MODIFIER_INGAME).apply(HOTKEYS_KEY);
     public static final ConfigHotkey UNLOAD_CURRENT_SCHEMATIC           = new ConfigHotkey("unloadCurrentSchematic",            "").apply(HOTKEYS_KEY);
 
     public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
             ADD_SELECTION_BOX,
-            CLONE_SELECTION,
             DELETE_SELECTION_BOX,
             EASY_PLACE_ACTIVATION,
             EASY_PLACE_FIRST,
             EASY_PLACE_TOGGLE,
-            EXECUTE_OPERATION,
             INVERT_GHOST_BLOCK_RENDER_STATE,
             INVERT_OVERLAY_RENDER_STATE,
             LAYER_MODE_NEXT,
@@ -120,13 +107,6 @@ public class Hotkeys
             RERENDER_SCHEMATIC,
             SAVE_AREA_AS_IN_MEMORY_SCHEMATIC,
             SAVE_AREA_AS_SCHEMATIC_TO_FILE,
-            SCHEMATIC_EDIT_BREAK_ALL,
-            SCHEMATIC_EDIT_BREAK_ALL_EXCEPT,
-            SCHEMATIC_EDIT_BREAK_DIRECTION,
-            SCHEMATIC_EDIT_REPLACE_ALL,
-            SCHEMATIC_EDIT_REPLACE_BLOCK,
-            SCHEMATIC_EDIT_REPLACE_DIRECTION,
-			SCHEMATIC_EDIT_REPLACE_SELECTION,			// Requested to be added by Earthcomputer; from Litemoretica
 			SCHEMATIC_PLACEMENT_ROTATION,
             SCHEMATIC_PLACEMENT_MIRROR,
             SELECTION_GRAB_MODIFIER,
@@ -155,8 +135,6 @@ public class Hotkeys
             TOOL_PLACE_CORNER_1,
             TOOL_PLACE_CORNER_2,
             TOOL_SELECT_ELEMENTS,
-            TOOL_SELECT_MODIFIER_BLOCK_1,
-            TOOL_SELECT_MODIFIER_BLOCK_2,
             UNLOAD_CURRENT_SCHEMATIC
     );
 }

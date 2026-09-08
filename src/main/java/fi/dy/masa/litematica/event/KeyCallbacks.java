@@ -30,7 +30,6 @@ import fi.dy.masa.litematica.selection.AreaSelection;
 import fi.dy.masa.litematica.selection.CornerSelectionMode;
 import fi.dy.masa.litematica.selection.SelectionManager;
 import fi.dy.masa.litematica.tool.ToolMode;
-import fi.dy.masa.litematica.tool.ToolModeData;
 import fi.dy.masa.litematica.util.*;
 import fi.dy.masa.litematica.util.PositionUtils.Corner;
 
@@ -77,9 +76,7 @@ public class KeyCallbacks
         Configs.Visuals.SCHEMATIC_OVERLAY_TYPE_WRONG_BLOCK.setValueChangeCallback(renderChangeCallback);
         Configs.Visuals.SCHEMATIC_OVERLAY_TYPE_WRONG_STATE.setValueChangeCallback(renderChangeCallback);
 
-        Hotkeys.CLONE_SELECTION.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.EASY_PLACE_ACTIVATION.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.EXECUTE_OPERATION.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.LAYER_MODE_NEXT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.LAYER_MODE_PREVIOUS.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.LAYER_NEXT.getKeybind().setCallback(callbackHotkeys);
@@ -107,8 +104,6 @@ public class KeyCallbacks
         Hotkeys.TOOL_PLACE_CORNER_1.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.TOOL_PLACE_CORNER_2.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.TOOL_SELECT_ELEMENTS.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.TOOL_SELECT_MODIFIER_BLOCK_1.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.TOOL_SELECT_MODIFIER_BLOCK_2.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.UNLOAD_CURRENT_SCHEMATIC.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.ADD_SELECTION_BOX.getKeybind().setCallback(callbackMessage);
         Hotkeys.DELETE_SELECTION_BOX.getKeybind().setCallback(callbackMessage);
@@ -135,7 +130,6 @@ public class KeyCallbacks
         Hotkeys.TOGGLE_TRANSLUCENT_RENDERING.getKeybind().setCallback(new RenderToggle(Configs.Visuals.RENDER_BLOCKS_AS_TRANSLUCENT));
         Hotkeys.TOGGLE_VERIFIER_OVERLAY_RENDERING.getKeybind().setCallback(new KeyCallbackToggleBooleanConfigWithMessage(Configs.InfoOverlays.VERIFIER_OVERLAY_ENABLED));
         Hotkeys.TOOL_ENABLED_TOGGLE.getKeybind().setCallback(new KeyCallbackToggleBooleanConfigWithMessage(Configs.Generic.TOOL_ITEM_ENABLED));
-		Hotkeys.SCHEMATIC_EDIT_REPLACE_SELECTION.getKeybind().setCallback(callbackMessage);
     }
 
     private static class ValueChangeCallback implements IValueChangeCallback<ConfigString>
@@ -215,20 +209,6 @@ public class KeyCallbacks
             boolean isToolSecondary = key == Hotkeys.TOOL_PLACE_CORNER_2.getKeybind();
             boolean isToolSelect = key == Hotkeys.TOOL_SELECT_ELEMENTS.getKeybind();
 
-            if (toolEnabled && isToolSelect)
-            {
-                if (mode.getUsesBlockPrimary() && Hotkeys.TOOL_SELECT_MODIFIER_BLOCK_1.getKeybind().isKeybindHeld())
-                {
-                    WorldUtils.setToolModeBlockState(mode, true, this.mc);
-                    return true;
-                }
-                else if (mode.getUsesBlockSecondary() && Hotkeys.TOOL_SELECT_MODIFIER_BLOCK_2.getKeybind().isKeybindHeld())
-                {
-                    WorldUtils.setToolModeBlockState(mode, false, this.mc);
-                    return true;
-                }
-            }
-
             if (toolEnabled && hasTool)
             {
                 int maxDistance = 200;
@@ -241,17 +221,7 @@ public class KeyCallbacks
                         boolean grabModifier = Hotkeys.SELECTION_GRAB_MODIFIER.getKeybind().isKeybindHeld();
                         boolean moveEverything = grabModifier;
 
-                        if (grabModifier && mode == ToolMode.MOVE)
-                        {
-                            Entity entity = fi.dy.masa.malilib.util.EntityUtils.getCameraEntity();
-                            BlockPos pos = RayTraceUtils.getTargetedPosition(this.mc.level, entity, maxDistance, false);
-
-                            if (pos != null)
-                            {
-                                SchematicUtils.moveCurrentlySelectedWorldRegionTo(pos, this.mc);
-                            }
-                        }
-                        else if (Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue() == CornerSelectionMode.CORNERS)
+                        if (Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue() == CornerSelectionMode.CORNERS)
                         {
                             Corner corner = isToolPrimary ? Corner.CORNER_1 : Corner.CORNER_2;
                             sm.setPositionOfCurrentSelectionToRayTrace(this.mc, corner, moveEverything, maxDistance);
@@ -488,35 +458,6 @@ public class KeyCallbacks
             {
                 return SchematicUtils.saveSchematic(true);
             }
-            else if (key == Hotkeys.CLONE_SELECTION.getKeybind())
-            {
-                SchematicUtils.cloneSelectionArea(this.mc);
-                return true;
-            }
-            else if (key == Hotkeys.EXECUTE_OPERATION.getKeybind() && ((hasTool && toolEnabled) || Configs.Generic.EXECUTE_REQUIRE_TOOL.getBooleanValue() == false))
-            {
-                if (mode == ToolMode.PASTE_SCHEMATIC)
-                {
-                    DataManager.getSchematicPlacementManager().pasteCurrentPlacementToWorld(this.mc);
-                    return true;
-                }
-                else if (mode == ToolMode.FILL && mode.getPrimaryBlock() != null)
-                {
-                    ToolUtils.fillSelectionVolumes(this.mc, mode.getPrimaryBlock(), null);
-                    return true;
-                }
-                else if (mode == ToolMode.REPLACE_BLOCK && mode.getPrimaryBlock() != null && mode.getSecondaryBlock() != null)
-                {
-                    ToolUtils.fillSelectionVolumes(this.mc, mode.getPrimaryBlock(), mode.getSecondaryBlock());
-                    return true;
-                }
-                else if (mode == ToolMode.DELETE)
-                {
-                    boolean removeEntities = true; // TODO
-                    ToolUtils.deleteSelectionVolumes(removeEntities, this.mc);
-                    return true;
-                }
-            }
             else if (key == Hotkeys.NUDGE_SELECTION_NEGATIVE.getKeybind() ||
                      key == Hotkeys.NUDGE_SELECTION_POSITIVE.getKeybind())
             {
@@ -608,14 +549,7 @@ public class KeyCallbacks
                     {
                         BlockPos pos = BlockPos.containing(this.mc.player.position());
 
-                        if (mode == ToolMode.MOVE)
-                        {
-                            SchematicUtils.moveCurrentlySelectedWorldRegionTo(pos, this.mc);
-                        }
-                        else
-                        {
-                            selection.moveEntireSelectionTo(pos, true);
-                        }
+                        selection.moveEntireSelectionTo(pos, true);
 
                         return true;
                     }
@@ -667,15 +601,7 @@ public class KeyCallbacks
             }
             else if (key == Hotkeys.SELECTION_MODE_CYCLE.getKeybind())
             {
-                if (mode == ToolMode.DELETE)
-                {
-                    ToolModeData.DELETE.toggleUsePlacement();
-                }
-                else if (mode == ToolMode.PASTE_SCHEMATIC)
-                {
-                    Configs.Generic.PASTE_REPLACE_BEHAVIOR.setOptionListValue(Configs.Generic.PASTE_REPLACE_BEHAVIOR.getOptionListValue().cycle(false));
-                }
-                else if (mode.getUsesAreaSelection())
+                if (mode.getUsesAreaSelection())
                 {
                     Configs.Generic.SELECTION_CORNERS_MODE.setOptionListValue(Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue().cycle(false));
                 }
@@ -717,22 +643,6 @@ public class KeyCallbacks
                         InfoUtils.printActionbarMessage("litematica.message.set_selection_box_point", corner.ordinal(), posStr);
                         return true;
                     }
-                }
-            }
-            // Requested to be added by Earthcomputer; from Litemoretica
-            else if (key == Hotkeys.SCHEMATIC_EDIT_REPLACE_SELECTION.getKeybind())
-            {
-                AreaSelection selection = DataManager.getSelectionManager().getCurrentSelection();
-
-                if (SchematicUtils.saveAreaSelectionToSchematic(selection, this.mc.level))
-                {
-                    BlockPos pos = selection.getEffectiveOrigin();
-
-                    String posStr = String.format("x: %d, y: %d, z: %d", pos.getX(), pos.getY(), pos.getZ());
-                    InfoUtils.showInGameMessage(MessageType.SUCCESS,
-                                                "litematica.message.schematic_edit_replace_selection", posStr
-                    );
-                    return true;
                 }
             }
 

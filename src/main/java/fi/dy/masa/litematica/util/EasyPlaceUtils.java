@@ -117,7 +117,6 @@ public class EasyPlaceUtils
         return Configs.Generic.EASY_PLACE_MODE.getBooleanValue() &&
 				Configs.Generic.EASY_PLACE_POST_REWRITE.getBooleanValue() &&
 				GameWrap.getClientPlayer() != null &&
-				DataManager.getToolMode() != ToolMode.REBUILD &&
 				Hotkeys.EASY_PLACE_ACTIVATION.getKeybind().isKeybindHeld();
     }
 

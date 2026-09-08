@@ -718,68 +718,6 @@ public class OverlayRenderer
         this.blockInfoLines.addAll(BlockUtils.getFormattedBlockStateProperties(state));
     }
 
-    public void renderSchematicRebuildTargetingOverlay(ProfilerFiller profiler)
-    {
-        profiler.push("rebuild_trace");
-        RayTraceWrapper traceWrapper = null;
-        Color4f color = null;
-        boolean direction = false;
-        Entity entity = fi.dy.masa.malilib.util.EntityUtils.getCameraEntity();
-
-        if (Hotkeys.SCHEMATIC_EDIT_BREAK_ALL.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_BREAK_OVERLAY_COLOR.getColor();
-        }
-        else if (Hotkeys.SCHEMATIC_EDIT_BREAK_ALL_EXCEPT.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_BREAK_EXCEPT_OVERLAY_COLOR.getColor();
-        }
-        else if (Hotkeys.SCHEMATIC_EDIT_BREAK_DIRECTION.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_BREAK_OVERLAY_COLOR.getColor();
-            direction = true;
-        }
-        else if (Hotkeys.SCHEMATIC_EDIT_REPLACE_ALL.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_REPLACE_OVERLAY_COLOR.getColor();
-        }
-        else if (Hotkeys.SCHEMATIC_EDIT_REPLACE_BLOCK.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_REPLACE_OVERLAY_COLOR.getColor();
-        }
-        else if (Hotkeys.SCHEMATIC_EDIT_REPLACE_DIRECTION.getKeybind().isKeybindHeld())
-        {
-            traceWrapper = RayTraceUtils.getGenericTrace(this.mc.level, entity, 20);
-            color = Configs.Colors.REBUILD_REPLACE_OVERLAY_COLOR.getColor();
-            direction = true;
-        }
-
-        profiler.popPush("render_target_overlay");
-        if (traceWrapper != null && traceWrapper.getHitType() == RayTraceWrapper.HitType.SCHEMATIC_BLOCK)
-        {
-            BlockHitResult trace = traceWrapper.getBlockHitResult();
-            BlockPos pos = trace.getBlockPos();
-
-            if (direction)
-            {
-                fi.dy.masa.malilib.render.RenderUtils.renderBlockTargetingOverlay(
-                        entity, pos, trace.getDirection(), trace.getLocation(), color);
-            }
-            else
-            {
-                fi.dy.masa.malilib.render.RenderUtils.renderBlockTargetingOverlaySimple(
-                        entity, pos, trace.getDirection(), color);
-            }
-        }
-
-        profiler.pop();
-    }
-
     public void renderPreviewFrame(GuiContext ctx, ProfilerFiller profiler)
     {
         profiler.push("render_preview_frame");

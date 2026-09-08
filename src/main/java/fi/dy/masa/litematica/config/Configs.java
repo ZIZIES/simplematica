@@ -44,12 +44,10 @@ public class Configs implements IConfigHandler
     {
 	    public static final ConfigOptionList    DEBUG_HUD_MODE              = new ConfigOptionList("debugHudMode", DebugHudMode.DEFAULT).apply(GENERIC_KEY);
         public static final ConfigOptionList    EASY_PLACE_PROTOCOL         = new ConfigOptionList("easyPlaceProtocolVersion", EasyPlaceProtocol.AUTO).apply(GENERIC_KEY);
-        public static final ConfigOptionList    PASTE_NBT_BEHAVIOR          = new ConfigOptionList("pasteNbtRestoreBehavior", PasteNbtBehavior.NONE).apply(GENERIC_KEY);
         public static final ConfigOptionList    PASTE_REPLACE_BEHAVIOR      = new ConfigOptionList("pasteReplaceBehavior", ReplaceBehavior.NONE).apply(GENERIC_KEY);
         public static final ConfigOptionList    PASTE_LAYER_BEHAVIOR        = new ConfigOptionList("pasteLayerBehavior", PasteLayerBehavior.ALL).apply(GENERIC_KEY);
         public static final ConfigOptionList    PLACEMENT_REPLACE_BEHAVIOR  = new ConfigOptionList("placementReplaceBehavior", ReplaceBehavior.ALL).apply(GENERIC_KEY);
         public static final ConfigOptionList    PLACEMENT_RESTRICTION_WARN  = new ConfigOptionList("placementRestrictionWarn", MessageOutputType.ACTIONBAR).apply(GENERIC_KEY);
-        public static final ConfigOptionList    SCHEMATIC_VCS_DELETE_MODE   = new ConfigOptionList("schematicVcsDeleteMode", PlacementDeletionMode.MATCHING_BLOCK).apply(GENERIC_KEY);
         public static final ConfigOptionList    SELECTION_CORNERS_MODE      = new ConfigOptionList("selectionCornersMode", CornerSelectionMode.CORNERS).apply(GENERIC_KEY);
 
         public static final ConfigBoolean       CUSTOM_SCHEMATIC_BASE_DIRECTORY_ENABLED = new ConfigBoolean("customSchematicBaseDirectoryEnabled", false).apply(GENERIC_KEY);
@@ -58,18 +56,6 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       AREAS_PER_WORLD             = new ConfigBoolean("areaSelectionsPerWorld", true).apply(GENERIC_KEY);
 //        public static final ConfigBoolean       BETTER_RENDER_ORDER         = new ConfigBoolean("betterRenderOrder", true).apply(GENERIC_KEY);
         public static final ConfigBoolean       CHANGE_SELECTED_CORNER      = new ConfigBoolean("changeSelectedCornerOnMove", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       CLONE_AT_ORIGINAL_POS       = new ConfigBoolean("cloneAtOriginalPosition", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       COMMAND_DISABLE_FEEDBACK    = new ConfigBoolean("commandDisableFeedback", true).apply(GENERIC_KEY);
-        public static final ConfigInteger       COMMAND_FILL_MAX_VOLUME     = new ConfigInteger("commandFillMaxVolume", 32768, 256, 10000000).apply(GENERIC_KEY);
-        public static final ConfigBoolean       COMMAND_FILL_NO_CHUNK_CLAMP = new ConfigBoolean("commandFillNoChunkClamp", false).apply(GENERIC_KEY);
-        public static final ConfigInteger       COMMAND_LIMIT               = new ConfigInteger("commandLimitPerTick", 8, 1, 256).apply(GENERIC_KEY);
-        public static final ConfigString        COMMAND_NAME_CLONE          = new ConfigString( "commandNameClone", "clone").apply(GENERIC_KEY);
-        public static final ConfigString        COMMAND_NAME_FILL           = new ConfigString( "commandNameFill", "fill").apply(GENERIC_KEY);
-        public static final ConfigString        COMMAND_NAME_SETBLOCK       = new ConfigString( "commandNameSetblock", "setblock").apply(GENERIC_KEY);
-        public static final ConfigString        COMMAND_NAME_SUMMON         = new ConfigString( "commandNameSummon", "summon").apply(GENERIC_KEY);
-        public static final ConfigInteger       COMMAND_TASK_INTERVAL       = new ConfigInteger("commandTaskInterval", 1, 1, 1000).apply(GENERIC_KEY);
-        public static final ConfigBoolean       COMMAND_USE_WORLDEDIT       = new ConfigBoolean("commandUseWorldEdit", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       COMMAND_USE_STRICT          = new ConfigBoolean("commandUseStrict", true).apply(GENERIC_KEY);
         public static final ConfigBoolean       DEBUG_HUD_PM_THREADS        = new ConfigBoolean("debugHudPMThreads", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       DEBUG_HUD_WORLD             = new ConfigBoolean("debugHudWorld", true).apply(GENERIC_KEY);
         public static final ConfigBoolean       DEBUG_LOGGING               = new ConfigBoolean("debugLogging", false).apply(GENERIC_KEY);
@@ -92,7 +78,6 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       ENTITY_DATA_SYNC_BACKUP     = new ConfigBoolean("entityDataSyncBackup", false).apply(GENERIC_KEY);
         public static final ConfigFloat         ENTITY_DATA_SYNC_CACHE_TIMEOUT= new ConfigFloat("entityDataSyncCacheTimeout", 2.75f, 1.0f, 100.0f).apply(GENERIC_KEY);
 //        public static final ConfigBoolean       ENTITY_DATA_LOAD_NBT        = new ConfigBoolean("entityDataSyncLoadNbt", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       EXECUTE_REQUIRE_TOOL        = new ConfigBoolean("executeRequireHoldingTool", true).apply(GENERIC_KEY);
         public static final ConfigBoolean       FIX_CHEST_MIRROR            = new ConfigBoolean("fixChestMirror", true).apply(GENERIC_KEY);
 //        public static final ConfigBoolean       FIX_GLAZED_TERRACOTTA_MIRROR= new ConfigBoolean("fixGlazedTerracottaMirror", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       FIX_RAIL_ROTATION           = new ConfigBoolean("fixRailRotation", true).apply(GENERIC_KEY);
@@ -108,16 +93,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       MATERIAL_LIST_COUNT_ENDER_CACHE       = new ConfigBoolean("materialListCountEnderCache", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       MATERIAL_LIST_IGNORE_STATE  = new ConfigBoolean("materialListIgnoreState", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       MATERIAL_LIST_RECIPE_DETAILS= new ConfigBoolean("materialListRecipeDetails", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_ALWAYS_USE_FILL       = new ConfigBoolean("pasteAlwaysUseFill", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_IGNORE_BE_ENTIRELY    = new ConfigBoolean("pasteIgnoreBlockEntitiesEntirely", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_IGNORE_BE_IN_FILL     = new ConfigBoolean("pasteIgnoreBlockEntitiesFromFill", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_IGNORE_CMD_LIMIT      = new ConfigBoolean("pasteIgnoreCommandLimitWithNbtRestore", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_IGNORE_ENTITIES       = new ConfigBoolean("pasteIgnoreEntities", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       PASTE_IGNORE_INVENTORY      = new ConfigBoolean("pasteIgnoreInventories", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_TO_MCFUNCTION         = new ConfigBoolean("pasteToMcFunctionFiles", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_USE_FILL_COMMAND      = new ConfigBoolean("pasteUseFillCommand", true).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_USING_COMMANDS_IN_SP  = new ConfigBoolean("pasteUsingCommandsInSp", false).apply(GENERIC_KEY);
-        public static final ConfigBoolean       PASTE_USING_SERVUX          = new ConfigBoolean("pasteUsingServux", true).apply(GENERIC_KEY);
 //        public static final ConfigBoolean       PASTE_SERVUX_EXPERIMENTAL   = new ConfigBoolean("pasteServuxExperimental", false).apply(GENERIC_KEY);
         public static final ConfigBoolean       PICK_BLOCK_AVOID_DAMAGEABLE = new ConfigBoolean("pickBlockAvoidDamageable", true).apply(GENERIC_KEY);
         public static final ConfigBoolean       PICK_BLOCK_AVOID_TOOLS      = new ConfigBoolean("pickBlockAvoidTools", false).apply(GENERIC_KEY);
@@ -147,11 +123,6 @@ public class Configs implements IConfigHandler
                 AREAS_PER_WORLD,
 //				BETTER_RENDER_ORDER,
                 CHANGE_SELECTED_CORNER,
-                CLONE_AT_ORIGINAL_POS,
-                COMMAND_DISABLE_FEEDBACK,
-                COMMAND_FILL_NO_CHUNK_CLAMP,
-                COMMAND_USE_WORLDEDIT,
-                COMMAND_USE_STRICT,
                 CUSTOM_SCHEMATIC_BASE_DIRECTORY_ENABLED,
                 DEBUG_HUD_MODE,
                 DEBUG_HUD_WORLD,
@@ -176,7 +147,6 @@ public class Configs implements IConfigHandler
                 ENTITY_DATA_SYNC_BACKUP,
                 ENTITY_DATA_SYNC_CACHE_TIMEOUT,
 //                ENTITY_DATA_LOAD_NBT,
-                EXECUTE_REQUIRE_TOOL,
                 FIX_CHEST_MIRROR,
 //                FIX_GLAZED_TERRACOTTA_MIRROR,
                 FIX_RAIL_ROTATION,
@@ -192,17 +162,7 @@ public class Configs implements IConfigHandler
                 MATERIAL_LIST_COUNT_ENDER_CACHE,
                 MATERIAL_LIST_IGNORE_STATE,
                 MATERIAL_LIST_RECIPE_DETAILS,
-                PASTE_ALWAYS_USE_FILL,
-                PASTE_IGNORE_BE_ENTIRELY,
-                PASTE_IGNORE_BE_IN_FILL,
-                PASTE_IGNORE_CMD_LIMIT,
-                PASTE_IGNORE_ENTITIES,
                 PASTE_IGNORE_INVENTORY,
-                PASTE_NBT_BEHAVIOR,
-                PASTE_TO_MCFUNCTION,
-                PASTE_USE_FILL_COMMAND,
-                PASTE_USING_COMMANDS_IN_SP,
-                PASTE_USING_SERVUX,
 //                PASTE_SERVUX_EXPERIMENTAL,
                 PICK_BLOCK_AVOID_DAMAGEABLE,
                 PICK_BLOCK_AVOID_TOOLS,
@@ -221,16 +181,8 @@ public class Configs implements IConfigHandler
 
                 PASTE_REPLACE_BEHAVIOR,
                 PASTE_LAYER_BEHAVIOR,
-                SCHEMATIC_VCS_DELETE_MODE,
                 SELECTION_CORNERS_MODE,
 
-                COMMAND_FILL_MAX_VOLUME,
-                COMMAND_LIMIT,
-                COMMAND_NAME_CLONE,
-                COMMAND_NAME_FILL,
-                COMMAND_NAME_SETBLOCK,
-                COMMAND_NAME_SUMMON,
-                COMMAND_TASK_INTERVAL,
                 CUSTOM_SCHEMATIC_BASE_DIRECTORY,
                 EASY_PLACE_SWAP_INTERVAL,
                 PICK_BLOCKABLE_SLOTS,
@@ -447,9 +399,6 @@ public class Configs implements IConfigHandler
         public static final ConfigColor AREA_SELECTION_BOX_SIDE_COLOR       = new ConfigColor("areaSelectionBoxSideColor",          "#30FFFFFF").apply(COLORS_KEY);
         public static final ConfigColor HIGHTLIGHT_BLOCK_IN_INV_COLOR       = new ConfigColor("hightlightBlockInInventoryColor",    "#30FF30FF").apply(COLORS_KEY);
         public static final ConfigColor MATERIAL_LIST_HUD_ITEM_COUNTS       = new ConfigColor("materialListHudItemCountsColor",     "#FFFFAA00").apply(COLORS_KEY);
-        public static final ConfigColor REBUILD_BREAK_OVERLAY_COLOR         = new ConfigColor("schematicRebuildBreakPlaceOverlayColor", "#4C33CC33").apply(COLORS_KEY);
-        public static final ConfigColor REBUILD_BREAK_EXCEPT_OVERLAY_COLOR  = new ConfigColor("schematicRebuildBreakExceptPlaceOverlayColor", "#4CF03030").apply(COLORS_KEY);
-        public static final ConfigColor REBUILD_REPLACE_OVERLAY_COLOR       = new ConfigColor("schematicRebuildReplaceOverlayColor","#4CF0A010").apply(COLORS_KEY);
         public static final ConfigColor SCHEMATIC_OVERLAY_COLOR_DIFF_BLOCK  = new ConfigColor("schematicOverlayColorDiffBlock",     "#30F8D650").apply(COLORS_KEY);
         public static final ConfigColor SCHEMATIC_OVERLAY_COLOR_EXTRA       = new ConfigColor("schematicOverlayColorExtra",         "#4CFF4CE6").apply(COLORS_KEY);
         public static final ConfigColor SCHEMATIC_OVERLAY_COLOR_MISSING     = new ConfigColor("schematicOverlayColorMissing",       "#2C33B3E6").apply(COLORS_KEY);
@@ -460,9 +409,6 @@ public class Configs implements IConfigHandler
                 AREA_SELECTION_BOX_SIDE_COLOR,
                 HIGHTLIGHT_BLOCK_IN_INV_COLOR,
                 MATERIAL_LIST_HUD_ITEM_COUNTS,
-                REBUILD_BREAK_OVERLAY_COLOR,
-                REBUILD_BREAK_EXCEPT_OVERLAY_COLOR,
-                REBUILD_REPLACE_OVERLAY_COLOR,
                 SCHEMATIC_OVERLAY_COLOR_DIFF_BLOCK,
                 SCHEMATIC_OVERLAY_COLOR_EXTRA,
                 SCHEMATIC_OVERLAY_COLOR_MISSING,

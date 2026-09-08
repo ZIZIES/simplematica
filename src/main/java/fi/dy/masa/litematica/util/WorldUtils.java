@@ -543,41 +543,6 @@ public class WorldUtils
         return chunks;
     }
 
-    public static void setToolModeBlockState(ToolMode mode, boolean primary, Minecraft mc)
-    {
-        BlockState state = Blocks.AIR.defaultBlockState();
-        Entity entity = fi.dy.masa.malilib.util.EntityUtils.getCameraEntity();
-        RayTraceWrapper wrapper = RayTraceUtils.getGenericTrace(mc.level, entity, getValidBlockRange(mc));
-
-        if (wrapper != null)
-        {
-            BlockHitResult trace = wrapper.getBlockHitResult();
-
-            if (trace != null && trace.getType() == HitResult.Type.BLOCK)
-            {
-                BlockPos pos = trace.getBlockPos();
-
-                if (wrapper.getHitType() == HitType.SCHEMATIC_BLOCK)
-                {
-                    state = SchematicWorldHandler.getSchematicWorld().getBlockState(pos);
-                }
-                else if (wrapper.getHitType() == HitType.VANILLA_BLOCK)
-                {
-                    state = mc.level.getBlockState(pos);
-                }
-            }
-        }
-
-        if (primary)
-        {
-            mode.setPrimaryBlock(state);
-        }
-        else
-        {
-            mode.setSecondaryBlock(state);
-        }
-    }
-
     /**
      * Does a ray trace to the schematic world, and returns either the closest or the furthest hit block.
      * @param closest -
@@ -683,7 +648,7 @@ public class WorldUtils
     @Deprecated
     public static void easyPlaceOnUseTick(Minecraft mc)
     {
-        if (mc.player != null && DataManager.getToolMode() != ToolMode.REBUILD &&
+        if (mc.player != null &&
             Configs.Generic.EASY_PLACE_MODE.getBooleanValue() &&
             Configs.Generic.EASY_PLACE_HOLD_ENABLED.getBooleanValue() &&
             Hotkeys.EASY_PLACE_ACTIVATION.getKeybind().isKeybindHeld() &&
@@ -700,8 +665,7 @@ public class WorldUtils
     public static boolean handleEasyPlace(Minecraft mc)
     {
         if (Configs.Generic.EASY_PLACE_MODE.getBooleanValue() &&
-            Configs.Generic.EASY_PLACE_POST_REWRITE.getBooleanValue() == false &&
-            DataManager.getToolMode() != ToolMode.REBUILD)
+            Configs.Generic.EASY_PLACE_POST_REWRITE.getBooleanValue() == false)
         {
             InteractionResult result = doEasyPlaceAction(mc);
 

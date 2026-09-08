@@ -38,7 +38,6 @@ import fi.dy.masa.litematica.schematic.verifier.SchematicVerifier;
 import fi.dy.masa.litematica.selection.AreaSelectionSimple;
 import fi.dy.masa.litematica.selection.SelectionManager;
 import fi.dy.masa.litematica.tool.ToolMode;
-import fi.dy.masa.litematica.tool.ToolModeData;
 import fi.dy.masa.litematica.util.SchematicWorldRefresher;
 import fi.dy.masa.litematica.util.ToBooleanFunction;
 
@@ -462,7 +461,6 @@ public class DataManager implements IDirectoryCache
 
         if (JsonUtils.hasObject(obj, "tool_mode_data"))
         {
-            this.toolModeDataFromJson(obj.get("tool_mode_data").getAsJsonObject());
         }
     }
 
@@ -475,24 +473,8 @@ public class DataManager implements IDirectoryCache
         obj.add("operation_mode", new JsonPrimitive(this.operationMode.name()));
         obj.add("render_range", this.renderRange.toJson());
         obj.add("area_simple", this.areaSimple.toJson());
-        obj.add("tool_mode_data", this.toolModeDataToJson());
 
         return obj;
-    }
-
-    private JsonObject toolModeDataToJson()
-    {
-        JsonObject obj = new JsonObject();
-        obj.add("delete", ToolModeData.DELETE.toJson());
-        return obj;
-    }
-
-    private void toolModeDataFromJson(JsonObject obj)
-    {
-        if (JsonUtils.hasObject(obj, "delete"))
-        {
-            ToolModeData.DELETE.fromJson(obj.get("delete").getAsJsonObject());
-        }
     }
 
     public static Path getDefaultBaseSchematicDirectory()

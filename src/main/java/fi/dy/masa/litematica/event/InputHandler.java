@@ -153,11 +153,6 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
                     area.moveEntireSelectionTo(old.relative(EntityUtils.getClosestLookingDirection(entity), amount), false);
                     return true;
                 }
-                else if (mode == ToolMode.MOVE)
-                {
-                    SchematicUtils.moveCurrentlySelectedWorldRegionToLookingDirection(amount, entity, mc);
-                    return true;
-                }
             }
         }
 
@@ -181,7 +176,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
                 forward = !forward;
             }
 
-            DataManager.setToolMode(DataManager.getToolMode().cycle(mc.player, forward));
+            DataManager.setToolMode(DataManager.getToolMode().cycle(forward));
             return true;
         }
 
@@ -243,26 +238,6 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
 
     private boolean handleAttackKey(Minecraft mc)
     {
-        if (mc.player != null && DataManager.getToolMode() == ToolMode.REBUILD && KeybindMulti.getTriggeredCount() == 0)
-        {
-            if (Hotkeys.SCHEMATIC_EDIT_BREAK_DIRECTION.getKeybind().isKeybindHeld())
-            {
-                return SchematicUtils.breakSchematicBlocks(mc);
-            }
-            else if (Hotkeys.SCHEMATIC_EDIT_BREAK_ALL_EXCEPT.getKeybind().isKeybindHeld())
-            {
-                return SchematicUtils.breakAllSchematicBlocksExceptTargeted(mc);
-            }
-            else if (Hotkeys.SCHEMATIC_EDIT_BREAK_ALL.getKeybind().isKeybindHeld())
-            {
-                return SchematicUtils.breakAllIdenticalSchematicBlocks(mc);
-            }
-            else
-            {
-                return SchematicUtils.breakSchematicBlock(mc);
-            }
-        }
-
         return false;
     }
 
@@ -270,34 +245,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
     {
         if (mc.player != null)
         {
-            if (DataManager.getToolMode() == ToolMode.REBUILD)
-            {
-                if (Hotkeys.SCHEMATIC_EDIT_REPLACE_DIRECTION.getKeybind().isKeybindHeld())
-                {
-                    return SchematicUtils.replaceSchematicBlocksInDirection(mc);
-                }
-                else if (Hotkeys.SCHEMATIC_EDIT_REPLACE_ALL.getKeybind().isKeybindHeld())
-                {
-                    return SchematicUtils.replaceAllIdenticalSchematicBlocks(mc);
-                }
-                else if (Hotkeys.SCHEMATIC_EDIT_REPLACE_BLOCK.getKeybind().isKeybindHeld())
-                {
-                    return SchematicUtils.replaceBlocksKeepingProperties(mc);
-                }
-                else if (Hotkeys.SCHEMATIC_EDIT_BREAK_DIRECTION.getKeybind().isKeybindHeld())
-                {
-                    return SchematicUtils.placeSchematicBlocksInDirection(mc);
-                }
-                else if (Hotkeys.SCHEMATIC_EDIT_BREAK_ALL.getKeybind().isKeybindHeld())
-                {
-                    return SchematicUtils.fillAirWithBlocks(mc);
-                }
-                else
-                {
-                    return SchematicUtils.placeSchematicBlock(mc);
-                }
-            }
-            else if (Configs.Generic.PICK_BLOCK_ENABLED.getBooleanValue())
+            if (Configs.Generic.PICK_BLOCK_ENABLED.getBooleanValue())
             {
                 if (KeybindMulti.hotkeyMatchesKeybind(Hotkeys.PICK_BLOCK_LAST, mc.options.keyUse))
                 {

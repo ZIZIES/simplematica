@@ -19,7 +19,6 @@ import fi.dy.masa.litematica.selection.Box;
 import fi.dy.masa.litematica.selection.SelectionManager;
 import fi.dy.masa.litematica.selection.SelectionMode;
 import fi.dy.masa.litematica.tool.ToolMode;
-import fi.dy.masa.litematica.tool.ToolModeData;
 import fi.dy.masa.litematica.util.EntityUtils;
 import fi.dy.masa.litematica.util.PasteLayerBehavior;
 import fi.dy.masa.litematica.util.PositionUtils;
@@ -100,12 +99,6 @@ public class ToolHud extends InfoHud
         String strYes = green + StringUtils.translate("litematica.label.yes") + rst;
         String strNo = GuiBase.TXT_RED + StringUtils.translate("litematica.label.no") + rst;
 
-        if (hasTool && mode == ToolMode.DELETE)
-        {
-            String strp = ToolModeData.DELETE.getUsePlacement() ? "litematica.hud.delete.target_mode.placement" : "litematica.hud.delete.target_mode.area";
-            lines.add(StringUtils.translate("litematica.hud.delete.target_mode", green + StringUtils.translate(strp) + rst));
-        }
-
         if (hasTool && mode.getUsesAreaSelection())
         {
             SelectionManager sm = DataManager.getSelectionManager();
@@ -164,30 +157,10 @@ public class ToolHud extends InfoHud
                 }
             }
 
-            if (mode.getUsesBlockPrimary())
-            {
-                BlockState state = mode.getPrimaryBlock();
-
-                if (state != null)
-                {
-                    lines.add(StringUtils.translate("litematica.tool_hud.block_1", this.getBlockString(state)));
-                }
-            }
-
-            if (mode.getUsesBlockSecondary())
-            {
-                BlockState state = mode.getSecondaryBlock();
-
-                if (state != null)
-                {
-                    lines.add(StringUtils.translate("litematica.tool_hud.block_2", this.getBlockString(state)));
-                }
-            }
-
             str = green + Configs.Generic.SELECTION_CORNERS_MODE.getOptionListValue().getDisplayName() + rst;
             lines.add(StringUtils.translate("litematica.hud.area_selection.selection_corners_mode", str));
         }
-        else if ((hasTool || mode == ToolMode.REBUILD) && mode.getUsesSchematic())
+        else if (hasTool && mode.getUsesSchematic())
         {
             SchematicPlacement schematicPlacement = DataManager.getSchematicPlacementManager().getSelectedSchematicPlacement();
 
@@ -209,15 +182,6 @@ public class ToolHud extends InfoHud
 
                 lines.add(StringUtils.translate("litematica.hud.area_selection.origin", green + str + rst));
 
-                BlockState state = mode.getPrimaryBlock();
-                ItemStack stack = this.mc.player != null ? this.mc.player.getMainHandItem() : ItemStack.EMPTY;
-
-                if (state != null && mode == ToolMode.REBUILD &&
-                    (stack.isEmpty() || EntityUtils.hasToolItemInHand(this.mc.player, InteractionHand.MAIN_HAND)))
-                {
-                    lines.add(StringUtils.translate("litematica.tool_hud.block_1", this.getBlockString(state)));
-                }
-
                 SubRegionPlacement placement = schematicPlacement.getSelectedSubRegionPlacement();
 
                 if (placement != null)
@@ -235,50 +199,6 @@ public class ToolHud extends InfoHud
                     lines.add(StringUtils.translate("litematica.hud.schematic_placement.sub_region_origin", green + str + rst));
                 }
 
-                if (mode == ToolMode.PASTE_SCHEMATIC)
-                {
-                    ReplaceBehavior replace = (ReplaceBehavior) Configs.Generic.PASTE_REPLACE_BEHAVIOR.getOptionListValue();
-                    str = replace.getDisplayName();
-
-                    if (replace == ReplaceBehavior.NONE)
-                    {
-                        str = red + str + rst;
-                    }
-                    else
-                    {
-                        str = orange + str + rst;
-                    }
-
-                    lines.add(StringUtils.translate("litematica.hud.misc.schematic_paste.replace_mode", str));
-
-                    PasteLayerBehavior layers = (PasteLayerBehavior) Configs.Generic.PASTE_LAYER_BEHAVIOR.getOptionListValue();
-                    str = layers.getDisplayName();
-
-                    if (layers == PasteLayerBehavior.ALL)
-                    {
-                        str = green + str + rst;
-                    }
-                    else
-                    {
-                        str = aqua + str + rst;
-                    }
-
-                    lines.add(StringUtils.translate("litematica.hud.misc.schematic_paste.layer_mode", str));
-
-                    str = Configs.Generic.PASTE_NBT_BEHAVIOR.getOptionListValue().getDisplayName();
-
-                    if (EntityDataManager.getInstance().hasServuxServer()
-                        && Configs.Generic.PASTE_USING_SERVUX.getBooleanValue()
-                        && !Configs.Generic.PASTE_USING_COMMANDS_IN_SP.getBooleanValue())
-                    {
-                        str = orange + "Servux" + rst;
-                    }
-
-                    lines.add(StringUtils.translate("litematica.hud.misc.schematic_paste.data_restore_mode", str));
-
-                    String strVal = Configs.Generic.PASTE_IGNORE_INVENTORY.getBooleanValue() ? strYes : strNo;
-                    lines.add(StringUtils.translate("litematica.hud.misc.schematic_paste.ignore_inventory_contents", strVal));
-                }
             }
             else
             {
@@ -288,15 +208,10 @@ public class ToolHud extends InfoHud
             }
         }
 
-        if (hasTool || mode == ToolMode.REBUILD)
+        if (hasTool)
         {
             str = StringUtils.translate("litematica.hud.selected_mode");
             String modeName = mode.getName();
-
-            if (mode == ToolMode.REBUILD)
-            {
-                modeName = orange + modeName + rst;
-            }
 
             lines.add(String.format("%s [%s%d%s/%s%d%s]: %s%s%s", str, green, mode.ordinal() + 1, white,
                     green, ToolMode.values().length, white, green, modeName, rst));

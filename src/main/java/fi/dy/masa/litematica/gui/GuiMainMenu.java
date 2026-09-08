@@ -198,7 +198,7 @@ public class GuiMainMenu extends GuiBase
         @Override
         public void actionPerformedWithButton(ButtonBase button, int mouseButton)
         {
-            ToolMode mode = DataManager.getToolMode().cycle(Minecraft.getInstance().player, mouseButton == 0);
+            ToolMode mode = DataManager.getToolMode().cycle(mouseButton == 0);
             DataManager.setToolMode(mode);
             this.gui.initGui();
         }

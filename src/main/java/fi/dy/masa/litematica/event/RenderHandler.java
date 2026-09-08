@@ -51,12 +51,6 @@ public class RenderHandler implements IRenderer
                 OverlayRenderer.getInstance().renderSchematicVerifierMismatches(profiler);
             }
 
-            if (DataManager.getToolMode() == ToolMode.REBUILD)
-            {
-                profiler.popPush("overlay_targeting");
-                OverlayRenderer.getInstance().renderSchematicRebuildTargetingOverlay(profiler);
-            }
-
             // Schematic Overlay Rendering
             profiler.popPush("schematic_overlay");
             LitematicaRenderer.getInstance().piecewiseRenderOverlay(profiler);

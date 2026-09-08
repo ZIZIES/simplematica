@@ -50,10 +50,6 @@ import fi.dy.masa.litematica.render.OverlayRenderer;
 import fi.dy.masa.litematica.render.infohud.StatusInfoRenderer;
 import fi.dy.masa.litematica.scheduler.TaskScheduler;
 import fi.dy.masa.litematica.scheduler.info_hud.InfoHudSync;
-import fi.dy.masa.litematica.scheduler.tasks.TaskPasteSchematicPerChunkBase;
-import fi.dy.masa.litematica.scheduler.tasks.TaskPasteSchematicPerChunkCommand;
-import fi.dy.masa.litematica.scheduler.tasks.TaskPasteSchematicPerChunkDirect;
-import fi.dy.masa.litematica.scheduler.tasks.TaskPasteSchematicSetblockToMcfunction;
 import fi.dy.masa.litematica.schematic.LitematicaSchematic;
 import fi.dy.masa.litematica.schematic.placement.SubRegionPlacement.RequiredEnabled;
 import fi.dy.masa.litematica.util.EntityUtils;
@@ -999,21 +995,6 @@ public class SchematicPlacementManager
         }
     }
 
-    public void pasteCurrentPlacementToWorld(Minecraft mc)
-    {
-        this.pastePlacementToWorld(this.getSelectedSchematicPlacement(), mc);
-    }
-
-    public void pastePlacementToWorld(final SchematicPlacement schematicPlacement, Minecraft mc)
-    {
-        this.pastePlacementToWorld(schematicPlacement, true, mc);
-    }
-
-    public void pastePlacementToWorld(final SchematicPlacement schematicPlacement, boolean changedBlocksOnly, Minecraft mc)
-    {
-        this.pastePlacementToWorld(schematicPlacement, changedBlocksOnly, true, mc);
-    }
-
     public void displayChunkDebugCmd(int cx, int cz, ChatComponent chat)
     {
         if (this.worldSupplier.get() != null)
@@ -1063,119 +1044,6 @@ public class SchematicPlacementManager
             );
 
             this.markChunkForRebuild(cx, cz);
-        }
-    }
-
-    private static class PasteToCommandsListener implements IConfirmationListener
-    {
-        private final SchematicPlacement schematicPlacement;
-        private final boolean changedBlocksOnly;
-
-        public PasteToCommandsListener(SchematicPlacement schematicPlacement, boolean changedBlocksOnly)
-        {
-            this.schematicPlacement = schematicPlacement;
-            this.changedBlocksOnly = changedBlocksOnly;
-        }
-
-        @Override
-        public boolean onActionConfirmed()
-        {
-            LayerRange range = DataManager.getRenderLayerRange();
-            TaskPasteSchematicSetblockToMcfunction task = new TaskPasteSchematicSetblockToMcfunction(Collections.singletonList(this.schematicPlacement), range, this.changedBlocksOnly);
-            TaskScheduler.getInstanceClient().scheduleTask(task, 1);
-            return true;
-        }
-
-        @Override
-        public boolean onActionCancelled()
-        {
-            return true;
-        }
-    }
-
-    public void pastePlacementToWorld(final SchematicPlacement schematicPlacement, boolean changedBlocksOnly, boolean printMessage, Minecraft mc)
-    {
-        if (mc.player != null && EntityUtils.isCreativeMode(mc.player))
-        {
-            if (schematicPlacement != null)
-            {
-                if (!schematicPlacement.isEnabled())
-                {
-                    InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "litematica.message.error.placement_paste_rendering_disabled");
-                    return;
-                }
-                /*
-                if (PositionUtils.isPlacementWithinWorld(mc.world, schematicPlacement, false) == false)
-                {
-                    InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "litematica.message.error.placement_paste_outside_world");
-                    return;
-                }
-                */
-                LayerRange range = DataManager.getRenderLayerRange();
-
-                if (Configs.Generic.PASTE_TO_MCFUNCTION.getBooleanValue())
-                {
-                    PasteToCommandsListener cl = new PasteToCommandsListener(schematicPlacement, changedBlocksOnly);
-                    GuiConfirmAction screen = new GuiConfirmAction(320, "Confirm paste to command files", cl, null, "Are you sure you want to paste the current placement as setblock commands into command/mcfunction files?");
-                    GuiBase.openGui(screen);
-                }
-                else if (mc.hasSingleplayerServer() == false || Configs.Generic.PASTE_USING_COMMANDS_IN_SP.getBooleanValue())
-                {
-                    if (EntityDataManager.getInstance().hasServuxServer() &&
-                        Configs.Generic.PASTE_USING_SERVUX.getBooleanValue())
-                    {
-                        Litematica.debugLog("Found a Servux server, I am sending the Schematic Placement to it.");
-                        InfoUtils.showGuiOrActionBarMessage(MessageType.INFO, "litematica.message.paste_with_servux");
-                        CompoundData data = schematicPlacement.toData(true);
-//                        final int maxSize = PacketSplitter.DEFAULT_MAX_RECEIVE_SIZE_S2C - 4096;
-
-                        EntityDataManager.getInstance().setInfoHudSync(new InfoHudSync(null));
-
-                        // Slice Extra-large schematics... :(
-//                        if (Configs.Generic.PASTE_SERVUX_EXPERIMENTAL.getBooleanValue())
-//                        if (nbt.sizeInBytes() > maxSize)
-//                        {
-////                            Litematica.LOGGER.warn("[Servux Paste]: Slicing Oversided Schematic for Servux Paste ...");
-////                            this.sliceForServux(schematicPlacement.getSchematic(), nbt, maxSize, printMessage);
-//                            InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "litematica.message.error.placement_paste_too_large_for_servux");
-//                        }
-//                        else
-//                        {
-                            data.putString("Task", "LitematicaPaste");
-                            data.putInt("Interval", 1);
-                            ServuxLitematicaHandler.getInstance().encodeClientData(ServuxLitematicaPacket.ResponseC2SStart(data));
-//                        }
-                    }
-                    else
-                    {
-                        TaskPasteSchematicPerChunkBase task = new TaskPasteSchematicPerChunkCommand(Collections.singletonList(schematicPlacement), range, changedBlocksOnly);
-                        TaskScheduler.getInstanceClient().scheduleTask(task, Configs.Generic.COMMAND_TASK_INTERVAL.getIntegerValue());
-
-                        if (printMessage)
-                        {
-                            InfoUtils.showGuiOrActionBarMessage(MessageType.INFO, "litematica.message.scheduled_task_added");
-                        }
-                    }
-                }
-                else if (mc.hasSingleplayerServer())
-                {
-                    TaskPasteSchematicPerChunkBase task = new TaskPasteSchematicPerChunkDirect(Collections.singletonList(schematicPlacement), range, changedBlocksOnly);
-                    TaskScheduler.getInstanceServer().scheduleTask(task, Configs.Generic.COMMAND_TASK_INTERVAL.getIntegerValue());
-
-                    if (printMessage)
-                    {
-                        InfoUtils.showGuiOrActionBarMessage(MessageType.INFO, "litematica.message.scheduled_task_added");
-                    }
-                }
-            }
-            else
-            {
-                InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "litematica.message.error.no_placement_selected");
-            }
-        }
-        else
-        {
-            InfoUtils.showGuiOrInGameMessage(MessageType.ERROR, "litematica.error.generic.creative_mode_only");
         }
     }
 
