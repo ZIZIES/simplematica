@@ -169,9 +169,9 @@ tasks.register('copyJarToMods', Copy) {
 	doFirst {
 		// Fabric Loader refuses to launch when two jars declare the same mod id,
 		// so clear out older builds of this mod before dropping the new one in.
-		// Both names are matched so this keeps working across the rename.
+		// Only this mod's own jars: since the rename to the simplematica mod id,
+		// Litematica can sit in the same folder and is not ours to delete.
 		fileTree(modsDir) {
-			include 'litematica-fabric-*.jar'
 			include 'simplematica-fabric-*.jar'
 		}.files.each {
 			logger.lifecycle("[mods] removing older jar: ${it.name}")
