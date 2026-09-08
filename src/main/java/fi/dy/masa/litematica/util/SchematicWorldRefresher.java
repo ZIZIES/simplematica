@@ -8,6 +8,8 @@ import net.minecraft.world.level.ChunkPos;
 
 import fi.dy.masa.malilib.interfaces.IRangeChangeListener;
 import fi.dy.masa.litematica.data.DataManager;
+import fi.dy.masa.litematica.materials.MaterialListBase;
+import fi.dy.masa.litematica.materials.MaterialListPlacement;
 import fi.dy.masa.litematica.world.SchematicWorldHandler;
 import fi.dy.masa.litematica.world.WorldSchematic;
 
@@ -17,9 +19,25 @@ public class SchematicWorldRefresher implements IRangeChangeListener
 
     private final Minecraft mc = Minecraft.getInstance();
 
+    /**
+     * Keeps a per-layer material list in step with the render layer. This listener already
+     * fires on every layer change, so the list follows the layer instead of needing a manual
+     * refresh. It is a no-op unless a per-layer list is actually open.
+     */
+    private void refreshPerLayerMaterialList()
+    {
+        MaterialListBase materialList = DataManager.getMaterialList();
+
+        if (materialList instanceof MaterialListPlacement placementList)
+        {
+            placementList.refreshIfLayerChanged();
+        }
+    }
+
     @Override
     public void updateAll()
     {
+        this.refreshPerLayerMaterialList();
         WorldSchematic world = SchematicWorldHandler.getSchematicWorld();
 
         if (world != null && this.mc.level != null)
@@ -60,6 +78,8 @@ public class SchematicWorldRefresher implements IRangeChangeListener
     @Override
     public void updateBetweenY(int minY, int maxY)
     {
+        this.refreshPerLayerMaterialList();
+
         WorldSchematic world = SchematicWorldHandler.getSchematicWorld();
 
         if (world != null && this.mc.level != null)

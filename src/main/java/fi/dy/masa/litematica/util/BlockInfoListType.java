@@ -9,7 +9,15 @@ import fi.dy.masa.malilib.util.StringUtils;
 public enum BlockInfoListType implements IConfigOptionListEntry, StringRepresentable
 {
     ALL             ("all",             "litematica.gui.label.block_info_list_type.all"),
-    RENDER_LAYERS   ("render_layers",   "litematica.gui.label.block_info_list_type.render_layers");
+    RENDER_LAYERS   ("render_layers",   "litematica.gui.label.block_info_list_type.render_layers"),
+    CURRENT_LAYER   ("current_layer",   "litematica.gui.label.block_info_list_type.current_layer"),
+    LAYER_AND_BELOW ("layer_and_below", "litematica.gui.label.block_info_list_type.layer_and_below");
+
+    /** True for the modes served from the cached per-layer tally rather than a world scan. */
+    public boolean isPerLayer()
+    {
+        return this == CURRENT_LAYER || this == LAYER_AND_BELOW;
+    }
 
     public static final StringRepresentable.EnumCodec<BlockInfoListType> CODEC = StringRepresentable.fromEnum(BlockInfoListType::values);
     public static final ImmutableList<BlockInfoListType> VALUES = ImmutableList.copyOf(values());
